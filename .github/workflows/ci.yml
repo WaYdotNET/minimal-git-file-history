@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -38,4 +38,3 @@ jobs:
         run: |
           npm install -g @vscode/vsce
           vsce package --no-yarn || echo "Packaging test completed"
-
