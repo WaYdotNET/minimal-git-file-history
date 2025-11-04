@@ -113,24 +113,24 @@ Open Settings (`Ctrl+,` or `Cmd+,`) and search for `Minimal Git file history`:
 
 ### Available Settings
 
-- **`minimalGitHistory.maxCommits`** (number, default: `100`)
+- **`minimalGitFileHistory.maxCommits`** (number, default: `100`)
   - Maximum number of commits to fetch when viewing file history
   - Higher values may slow down loading for files with extensive history
   - Range: positive integer
 
-- **`minimalGitHistory.blameEnabled`** (boolean, default: `true`)
+- **`minimalGitFileHistory.blameEnabled`** (boolean, default: `true`)
   - Enable Git Blame annotations by default
   - When enabled, CodeLens annotations show commit information above each line
   - Can be toggled on/off via the command palette or context menu
 
-- **`minimalGitHistory.dateFormat`** (string, default: `"relative"`)
+- **`minimalGitFileHistory.dateFormat`** (string, default: `"relative"`)
   - Date format for commit display in the history view
   - Options:
     - `"relative"`: Shows relative time (e.g., "2 hours ago", "3 days ago")
     - `"absolute"`: Shows absolute date and time (e.g., "2024-01-15 14:30:00")
     - `"both"`: Shows both relative and absolute (e.g., "2 hours ago (2024-01-15 14:30:00)")
 
-- **`minimalGitHistory.autoLoadOnFileSelect`** (boolean, default: `false`)
+- **`minimalGitFileHistory.autoLoadOnFileSelect`** (boolean, default: `false`)
   - Automatically load Git history in the Minimal Git file history panel when a file is selected or opened in the editor
   - When enabled, the history panel updates automatically as you switch between files
   - Recommended for users who frequently review file history
@@ -141,10 +141,10 @@ You can configure these settings in your `settings.json`:
 
 ```json
 {
-  "minimalGitHistory.maxCommits": 200,
-  "minimalGitHistory.blameEnabled": true,
-  "minimalGitHistory.dateFormat": "both",
-  "minimalGitHistory.autoLoadOnFileSelect": true
+  "minimalGitFileHistory.maxCommits": 200,
+  "minimalGitFileHistory.blameEnabled": true,
+  "minimalGitFileHistory.dateFormat": "both",
+  "minimalGitFileHistory.autoLoadOnFileSelect": true
 }
 ```
 
@@ -188,7 +188,7 @@ All Git operations are performed in the background, and results are cached for p
 
 You can customize keyboard shortcuts in Keybindings (`Ctrl+K Ctrl+S` / `Cmd+K Cmd+S`):
 
-- Search for `minimalGitHistory` or `gitFileHistory` to see all available commands
+- Search for `minimalGitFileHistory` to see all available commands
 - Assign your preferred shortcuts
 
 ## Troubleshooting
@@ -204,7 +204,7 @@ You can customize keyboard shortcuts in Keybindings (`Ctrl+K Ctrl+S` / `Cmd+K Cm
 - Try running `git status` in terminal to verify repository state
 
 ### Blame not showing
-- Make sure `minimalGitHistory.blameEnabled` is set to `true` in settings
+- Make sure `minimalGitFileHistory.blameEnabled` is set to `true` in settings
 - The file must be tracked by Git
 - Try refreshing the editor or toggling blame off and on again
 

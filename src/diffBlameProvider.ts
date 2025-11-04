@@ -37,7 +37,7 @@ export class DiffBlameProvider {
         }
 
         const commit = blameLine.commit;
-        const dateFormat = vscode.workspace.getConfiguration('minimalGitHistory').get<'relative' | 'absolute' | 'both'>('dateFormat', 'relative');
+        const dateFormat = vscode.workspace.getConfiguration('minimalGitFileHistory').get<'relative' | 'absolute' | 'both'>('dateFormat', 'relative');
 
         // Create hover content similar to GitHub
         const markdown = new vscode.MarkdownString();

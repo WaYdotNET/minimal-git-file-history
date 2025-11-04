@@ -25,45 +25,45 @@
   "contributes": {
     "commands": [
       {
-        "command": "gitFileHistory.showHistory",
+        "command": "minimalGitFileHistory.showHistory",
         "title": "Show Minimal Git file history",
         "icon": "$(history)"
       },
       {
-        "command": "gitFileHistory.showBlame",
+        "command": "minimalGitFileHistory.showBlame",
         "title": "Toggle Git Blame",
         "icon": "$(person)"
       },
       {
-        "command": "gitFileHistory.compareWithPrevious",
+        "command": "minimalGitFileHistory.compareWithPrevious",
         "title": "Compare with Previous Commit"
       },
       {
-        "command": "gitFileHistory.compareWithWorking",
+        "command": "minimalGitFileHistory.compareWithWorking",
         "title": "Compare with Working Directory"
       },
       {
-        "command": "gitFileHistory.compareVersions",
+        "command": "minimalGitFileHistory.compareVersions",
         "title": "Compare Two Commits"
       },
       {
-        "command": "gitFileHistory.viewCommit",
+        "command": "minimalGitFileHistory.viewCommit",
         "title": "View File at Commit"
       },
       {
-        "command": "gitFileHistory.navigateToParent",
+        "command": "minimalGitFileHistory.navigateToParent",
         "title": "Navigate to Parent Commit"
       },
       {
-        "command": "gitFileHistory.navigateToChild",
+        "command": "minimalGitFileHistory.navigateToChild",
         "title": "Navigate to Child Commit"
       },
       {
-        "command": "gitFileHistory.openDiffPanel",
+        "command": "minimalGitFileHistory.openDiffPanel",
         "title": "Open Detailed Diff Panel"
       },
       {
-        "command": "gitFileHistory.refresh",
+        "command": "minimalGitFileHistory.refresh",
         "title": "Refresh History",
         "icon": "$(refresh)"
       }
@@ -71,51 +71,51 @@
     "menus": {
       "explorer/context": [
         {
-          "command": "gitFileHistory.showHistory",
+          "command": "minimalGitFileHistory.showHistory",
           "when": "resourceLangId != 'git'",
           "group": "git-history"
         },
         {
-          "command": "gitFileHistory.compareWithWorking",
+          "command": "minimalGitFileHistory.compareWithWorking",
           "when": "resourceLangId != 'git'",
           "group": "git-history"
         }
       ],
       "editor/context": [
         {
-          "command": "gitFileHistory.showHistory",
+          "command": "minimalGitFileHistory.showHistory",
           "group": "git-history"
         },
         {
-          "command": "gitFileHistory.showBlame",
+          "command": "minimalGitFileHistory.showBlame",
           "group": "git-history"
         },
         {
-          "command": "gitFileHistory.compareWithPrevious",
+          "command": "minimalGitFileHistory.compareWithPrevious",
           "group": "git-history"
         },
         {
-          "command": "gitFileHistory.compareWithWorking",
+          "command": "minimalGitFileHistory.compareWithWorking",
           "group": "git-history"
         }
       ],
       "scm/resourceState/context": [
         {
-          "command": "gitFileHistory.showHistory",
+          "command": "minimalGitFileHistory.showHistory",
           "group": "git-history"
         }
       ],
       "view/title": [
         {
-          "command": "gitFileHistory.refresh",
-          "when": "view == gitFileHistory.view",
+          "command": "minimalGitFileHistory.refresh",
+          "when": "view == minimalGitFileHistory.view",
           "group": "navigation"
         }
       ],
       "view/item/context": [
         {
-          "command": "gitFileHistory.viewCommit",
-          "when": "view == gitFileHistory.view && viewItem == 'commit'",
+          "command": "minimalGitFileHistory.viewCommit",
+          "when": "view == minimalGitFileHistory.view && viewItem == 'commit'",
           "group": "inline"
         }
       ]
@@ -123,7 +123,7 @@
     "views": {
       "explorer": [
         {
-          "id": "gitFileHistory.view",
+          "id": "minimalGitFileHistory.view",
           "name": "Minimal Git file history",
           "icon": "media/logo.png",
           "when": "workspaceFolderCount > 0"
@@ -133,17 +133,17 @@
     "configuration": {
       "title": "Minimal Git file history",
       "properties": {
-        "minimalGitHistory.maxCommits": {
+        "minimalGitFileHistory.maxCommits": {
           "type": "number",
           "default": 100,
           "description": "Maximum number of commits to fetch"
         },
-        "minimalGitHistory.blameEnabled": {
+        "minimalGitFileHistory.blameEnabled": {
           "type": "boolean",
           "default": true,
           "description": "Enable Git Blame annotations"
         },
-        "minimalGitHistory.dateFormat": {
+        "minimalGitFileHistory.dateFormat": {
           "type": "string",
           "default": "relative",
           "enum": [
@@ -153,7 +153,7 @@
           ],
           "description": "Date format for commit display"
         },
-        "minimalGitHistory.autoLoadOnFileSelect": {
+        "minimalGitFileHistory.autoLoadOnFileSelect": {
           "type": "boolean",
           "default": false,
           "description": "Automatically load Git history in the Minimal Git file history panel when a file is selected or opened in the editor"

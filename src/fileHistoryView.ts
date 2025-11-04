@@ -11,7 +11,7 @@ export class CommitTreeItem extends vscode.TreeItem {
   ) {
     super(commit.message, collapsibleState);
 
-    const config = vscode.workspace.getConfiguration('minimalGitHistory');
+    const config = vscode.workspace.getConfiguration('minimalGitFileHistory');
     const dateFormat = config.get<'relative' | 'absolute' | 'both'>('dateFormat', 'relative');
 
     this.label = truncateMessage(commit.message);
@@ -21,7 +21,7 @@ export class CommitTreeItem extends vscode.TreeItem {
 
     // Command to view commit diff without modifying the panel
     this.command = {
-      command: 'gitFileHistory.viewCommitSilent',
+      command: 'minimalGitFileHistory.viewCommitSilent',
       title: 'View Commit',
       arguments: [this.filePath, commit.hash],
     };
@@ -76,7 +76,7 @@ export class FileHistoryProvider implements vscode.TreeDataProvider<vscode.TreeI
 
       if (!commits) {
         try {
-          const config = vscode.workspace.getConfiguration('minimalGitHistory');
+          const config = vscode.workspace.getConfiguration('minimalGitFileHistory');
           const maxCommits = config.get<number>('maxCommits', 100);
 
           commits = await this.gitService.getFileHistory(filePath, maxCommits);

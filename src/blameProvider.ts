@@ -20,7 +20,7 @@ export class BlameProvider {
           return [];
         }
 
-        const config = vscode.workspace.getConfiguration('minimalGitHistory');
+        const config = vscode.workspace.getConfiguration('minimalGitFileHistory');
         if (!config.get<boolean>('blameEnabled', true)) {
           return [];
         }
@@ -36,7 +36,7 @@ export class BlameProvider {
 
             const lens = new vscode.CodeLens(range, {
               title: `${commit.author} • ${getShortHash(commit.hash)} • ${formatDate(commit.date, dateFormat)}`,
-              command: 'gitFileHistory.viewCommit',
+              command: 'minimalGitFileHistory.viewCommit',
               arguments: [document.uri.fsPath, commit.hash],
               tooltip: `${commit.author} <${commit.email}>\n${getShortHash(commit.hash)}\n${formatDate(commit.date, 'both')}\n\n${commit.message}`,
             });

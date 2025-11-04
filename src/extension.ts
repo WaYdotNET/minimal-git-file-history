@@ -22,7 +22,7 @@ export function activate(context: vscode.ExtensionContext) {
   blameProvider = new BlameProvider(gitService);
 
   // Register tree view
-  const treeView = vscode.window.createTreeView('gitFileHistory.view', {
+  const treeView = vscode.window.createTreeView('minimalGitFileHistory.view', {
     treeDataProvider: fileHistoryProvider,
     showCollapseAll: true,
     canSelectMany: true, // Enable multi-selection for comparing commits
@@ -86,7 +86,7 @@ export function activate(context: vscode.ExtensionContext) {
   // Register commands
   const commands = [
     // Show file history
-    vscode.commands.registerCommand('gitFileHistory.showHistory', async (uri?: vscode.Uri) => {
+    vscode.commands.registerCommand('minimalGitFileHistory.showHistory', async (uri?: vscode.Uri) => {
       try {
         const filePath = await getFilePath(uri);
         if (!filePath) {
@@ -125,7 +125,7 @@ export function activate(context: vscode.ExtensionContext) {
     }),
 
     // Toggle Git Blame
-    vscode.commands.registerCommand('gitFileHistory.showBlame', async (uri?: vscode.Uri) => {
+    vscode.commands.registerCommand('minimalGitFileHistory.showBlame', async (uri?: vscode.Uri) => {
       const filePath = await getFilePath(uri);
       if (filePath) {
         await blameProvider.toggle(filePath);
@@ -133,7 +133,7 @@ export function activate(context: vscode.ExtensionContext) {
     }),
 
     // Compare with previous commit
-    vscode.commands.registerCommand('gitFileHistory.compareWithPrevious', async (uri?: vscode.Uri, commitHash?: string) => {
+    vscode.commands.registerCommand('minimalGitFileHistory.compareWithPrevious', async (uri?: vscode.Uri, commitHash?: string) => {
       const filePath = await getFilePath(uri);
       if (!filePath) {
         return;
@@ -153,7 +153,7 @@ export function activate(context: vscode.ExtensionContext) {
     }),
 
     // Compare with working directory
-    vscode.commands.registerCommand('gitFileHistory.compareWithWorking', async (uri?: vscode.Uri, commitHash?: string) => {
+    vscode.commands.registerCommand('minimalGitFileHistory.compareWithWorking', async (uri?: vscode.Uri, commitHash?: string) => {
       const filePath = await getFilePath(uri);
       if (filePath) {
         await diffViewer.compareWithWorking(filePath, commitHash);
@@ -161,7 +161,7 @@ export function activate(context: vscode.ExtensionContext) {
     }),
 
     // Compare two commits
-    vscode.commands.registerCommand('gitFileHistory.compareVersions', async (uri?: vscode.Uri) => {
+    vscode.commands.registerCommand('minimalGitFileHistory.compareVersions', async (uri?: vscode.Uri) => {
       const filePath = await getFilePath(uri);
       if (!filePath) {
         return;
@@ -206,7 +206,7 @@ export function activate(context: vscode.ExtensionContext) {
     }),
 
     // View file at commit - shows diff with previous commit (silent version that doesn't modify panel)
-    vscode.commands.registerCommand('gitFileHistory.viewCommitSilent', async (filePath: string, commitHash: string) => {
+    vscode.commands.registerCommand('minimalGitFileHistory.viewCommitSilent', async (filePath: string, commitHash: string) => {
       try {
         // Get commits to find the previous one without modifying the panel
         // Use gitService directly to avoid triggering panel refresh
@@ -236,7 +236,7 @@ export function activate(context: vscode.ExtensionContext) {
     }),
 
     // View file at commit - shows diff with previous commit
-    vscode.commands.registerCommand('gitFileHistory.viewCommit', async (arg1?: string | CommitTreeItem, commitHash?: string) => {
+    vscode.commands.registerCommand('minimalGitFileHistory.viewCommit', async (arg1?: string | CommitTreeItem, commitHash?: string) => {
       // Handle both cases: called with arguments or from menu context (CommitTreeItem)
       let filePath: string;
       let hash: string;
@@ -283,12 +283,12 @@ export function activate(context: vscode.ExtensionContext) {
     }),
 
     // Refresh history
-    vscode.commands.registerCommand('gitFileHistory.refresh', () => {
+    vscode.commands.registerCommand('minimalGitFileHistory.refresh', () => {
       fileHistoryProvider.refresh();
     }),
 
     // Open diff panel
-    vscode.commands.registerCommand('gitFileHistory.openDiffPanel', async (uri?: vscode.Uri, commit1?: string, commit2?: string) => {
+    vscode.commands.registerCommand('minimalGitFileHistory.openDiffPanel', async (uri?: vscode.Uri, commit1?: string, commit2?: string) => {
       const filePath = await getFilePath(uri);
       if (!filePath) {
         return;
@@ -326,7 +326,7 @@ export function activate(context: vscode.ExtensionContext) {
   // Helper function to load file history automatically
   async function loadFileHistoryAuto(filePath: string, uri?: vscode.Uri): Promise<void> {
     try {
-      const config = vscode.workspace.getConfiguration('minimalGitHistory');
+      const config = vscode.workspace.getConfiguration('minimalGitFileHistory');
       const autoLoad = config.get<boolean>('autoLoadOnFileSelect', false);
       if (!autoLoad) {
         return;
@@ -401,9 +401,9 @@ export function activate(context: vscode.ExtensionContext) {
 
   // Listen for configuration changes to react immediately
   const onDidChangeConfigurationDisposable = vscode.workspace.onDidChangeConfiguration(async (e) => {
-      if (e.affectsConfiguration('minimalGitHistory.autoLoadOnFileSelect')) {
+      if (e.affectsConfiguration('minimalGitFileHistory.autoLoadOnFileSelect')) {
       // If auto-load was just enabled and there's an active editor, load its history
-      const config = vscode.workspace.getConfiguration('minimalGitHistory');
+      const config = vscode.workspace.getConfiguration('minimalGitFileHistory');
       const autoLoad = config.get<boolean>('autoLoadOnFileSelect', false);
 
       if (autoLoad) {
@@ -420,10 +420,10 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(onDidChangeConfigurationDisposable);
 
   // Show welcome message (only once)
-    const hasShownWelcome = context.globalState.get<boolean>('minimalGitHistory.hasShownWelcome', false);
+    const hasShownWelcome = context.globalState.get<boolean>('minimalGitFileHistory.hasShownWelcome', false);
     if (!hasShownWelcome) {
       vscode.window.showInformationMessage('Minimal Git file history extension is now active! Right-click a file to view its history.');
-      context.globalState.update('minimalGitHistory.hasShownWelcome', true);
+      context.globalState.update('minimalGitFileHistory.hasShownWelcome', true);
     }
 }
 
