@@ -26,6 +26,24 @@ jobs:
       - name: Compile TypeScript
         run: npm run compile
 
+      - name: Install ovsx CLI
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+        run: npm install -g @openvsx/cli
+
+      - name: Create namespace on Open VSX (if needed)
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+        env:
+          OVSX_PAT: ${{ secrets.OVSX_PAT }}
+        run: |
+          if [ -z "$OVSX_PAT" ]; then
+            echo "OVSX_PAT secret is not set. Skipping Open VSX Registry publication."
+            exit 0
+          else
+            # Try to create namespace, ignore error if it already exists
+            ovsx create-namespace waydotnet --pat "$OVSX_PAT" || echo "Namespace may already exist"
+          fi
+        continue-on-error: true
+
       - name: Publish to Open VSX Registry
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
         uses: HaaLeo/publish-vscode-extension@v2

@@ -16,11 +16,18 @@ This document describes how to release a new version of the extension.
 
 ### Getting Open VSX Registry Token
 
+**IMPORTANT:** You must create the namespace before publishing for the first time.
+
 1. Go to https://open-vsx.org/user-settings/namespaces
-2. Create a namespace if you haven't already (must match your publisher name: `waydotnet`)
+2. **Create the namespace** `waydotnet` if you haven't already:
+   - Click "Create Namespace"
+   - Enter `waydotnet` as the namespace name
+   - This must match your publisher name exactly
 3. Go to https://open-vsx.org/user-settings/tokens
 4. Create a new token and copy it
 5. Add it as a GitHub Secret named `OVSX_PAT`
+
+**Note:** The GitHub Actions workflow will attempt to create the namespace automatically if it doesn't exist, but it's recommended to create it manually first to avoid any issues.
 
 ## Release Steps
 
