@@ -6,46 +6,6 @@ A VSCode/Cursor extension that provides comprehensive Git file history navigatio
 
 </div>
 
-## Screenshots
-
-> **Note:** The screenshots below are placeholders. To capture actual screenshots of the extension, follow the instructions in `SCREENSHOT_INSTRUCTIONS.md` or run `python3 generate_screenshots.py` to create placeholder images.
-
-### 📸 File History Sidebar View
-
-![File History Sidebar](screenshots/screenshot-file-history-sidebar.png)
-
-The Git File History sidebar view showing commit history for a selected file. Each commit displays the commit message, author, and relative date.
-
-### 📸 Git Blame Annotations
-
-![Git Blame Annotations](screenshots/screenshot-git-blame-annotations.png)
-
-Git Blame annotations showing who last modified each line of code. Click on any annotation to jump to that commit.
-
-### 📸 Diff Viewer - Compare Versions
-
-![Diff Viewer](screenshots/screenshot-diff-viewer.png)
-
-Side-by-side diff view comparing two commits. Added lines are highlighted in green, removed lines in red.
-
-### 📸 Context Menu
-
-![Context Menu](screenshots/screenshot-context-menu.png)
-
-Context menu options available from the Explorer. Right-click any file to access Git File History features.
-
-### 📸 Commit Details View
-
-![Commit Details View](screenshots/screenshot-commit-details-view.png)
-
-Viewing a file at a specific commit. The file content reflects the state at that point in time.
-
-### 📸 Compare Two Commits Dialog
-
-![Compare Dialog](screenshots/screenshot-compare-dialog.png)
-
-Quick Pick dialog for selecting commits to compare. Choose any two commits from the history.
-
 ## Features
 
 ### 📜 File History View
@@ -219,6 +179,8 @@ MIT License
 ## Author
 
 **WaYdotNET (Carlo Bertini)**
+
+Website: [www.waydotnet.com](https://www.waydotnet.com)
 
 ## Acknowledgments
 
