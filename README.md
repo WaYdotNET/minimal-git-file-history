@@ -172,6 +172,12 @@ You can customize keyboard shortcuts in Keybindings (`Ctrl+K Ctrl+S` / `Cmd+K Cm
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+## Release Process
+
+This extension is automatically published to both VS Code Marketplace and Open VSX Registry (for Cursor) via GitHub Actions when a new version tag is pushed.
+
+For detailed release instructions, see [RELEASE.md](RELEASE.md).
+
 ## License
 
 MIT License
