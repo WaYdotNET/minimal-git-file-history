@@ -16,7 +16,7 @@
   "icon": "media/logo.png",
   "categories": [
     "Other",
-    "Source Control"
+    "SCM Providers"
   ],
   "activationEvents": [
     "onStartupFinished"
