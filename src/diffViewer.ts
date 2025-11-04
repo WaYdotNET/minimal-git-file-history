@@ -6,15 +6,29 @@ import * as path from 'path';
 import * as fs from 'fs/promises';
 import * as os from 'os';
 
+/**
+ * Service class for displaying Git diffs in VS Code's built-in diff viewer.
+ * Creates temporary files and manages blame information for diff views.
+ */
 export class DiffViewer {
   private gitService: GitService;
   private blameProvider: DiffBlameProvider;
 
+  /**
+   * Creates a new DiffViewer instance.
+   * @param gitService - The GitService instance to use for Git operations
+   * @param blameProvider - The DiffBlameProvider instance for displaying blame information
+   */
   constructor(gitService: GitService, blameProvider: DiffBlameProvider) {
     this.gitService = gitService;
     this.blameProvider = blameProvider;
   }
 
+  /**
+   * Compares a file at a specific commit with its previous commit (parent).
+   * @param filePath - Absolute or relative path to the file
+   * @param commitHash - The commit hash to compare
+   */
   async compareWithPrevious(filePath: string, commitHash: string): Promise<void> {
     try {
       const diff = await this.gitService.getDiff(filePath, commitHash);
@@ -32,6 +46,11 @@ export class DiffViewer {
     }
   }
 
+  /**
+   * Compares a file at a specific commit with the working directory.
+   * @param filePath - Absolute or relative path to the file
+   * @param commitHash - Optional commit hash to compare with (defaults to HEAD)
+   */
   async compareWithWorking(filePath: string, commitHash?: string): Promise<void> {
     try {
       const diff = await this.gitService.getDiff(filePath, commitHash, undefined, true);
@@ -42,6 +61,12 @@ export class DiffViewer {
     }
   }
 
+  /**
+   * Compares a file between two commits.
+   * @param filePath - Absolute or relative path to the file
+   * @param commit1 - First commit hash (older version)
+   * @param commit2 - Second commit hash (newer version)
+   */
   async compareVersions(filePath: string, commit1: string, commit2: string): Promise<void> {
     try {
       const diff = await this.gitService.getDiff(filePath, commit1, commit2);
@@ -51,6 +76,11 @@ export class DiffViewer {
     }
   }
 
+  /**
+   * Opens a file at a specific commit using the custom git-file-history URI scheme.
+   * @param filePath - Absolute or relative path to the file
+   * @param commitHash - The commit hash to view the file at
+   */
   async viewFileAtCommit(filePath: string, commitHash: string): Promise<void> {
     try {
       const encodedPath = encodeURIComponent(filePath);
@@ -63,6 +93,17 @@ export class DiffViewer {
     }
   }
 
+  /**
+   * Shows a diff in VS Code's built-in diff viewer.
+   * Creates temporary files for both versions and opens them in a diff view.
+   * @param diff - The GitDiff object containing diff information
+   * @param filePath - Original file path
+   * @param leftLabel - Label for the left side of the diff
+   * @param rightLabel - Label for the right side of the diff
+   * @param leftCommitHash - Optional commit hash for the left side (for blame)
+   * @param rightCommitHash - Optional commit hash for the right side (for blame)
+   * @private
+   */
   private async showDiff(diff: GitDiff, filePath: string, leftLabel: string, rightLabel: string, leftCommitHash?: string, rightCommitHash?: string): Promise<void> {
     try {
       // Create temporary files for the diff
@@ -150,6 +191,13 @@ export class DiffViewer {
     }
   }
 
+  /**
+   * Shows a diff in a panel (currently uses the built-in diff viewer).
+   * @param diff - The GitDiff object containing diff information
+   * @param filePath - Original file path
+   * @param commit1 - Optional first commit hash
+   * @param commit2 - Optional second commit hash
+   */
   async showDiffInPanel(diff: GitDiff, filePath: string, commit1?: string, commit2?: string): Promise<void> {
     // This would open a webview panel with detailed diff view
     // For now, we'll use the built-in diff viewer

@@ -3,7 +3,16 @@ import { Commit } from './types';
 import { GitService } from './gitService';
 import { formatDate, truncateMessage, getShortHash } from './utils';
 
+/**
+ * Tree item representing a single commit in the file history view.
+ */
 export class CommitTreeItem extends vscode.TreeItem {
+  /**
+   * Creates a new CommitTreeItem.
+   * @param commit - The commit object
+   * @param filePath - The file path this commit belongs to
+   * @param collapsibleState - The collapsible state of the tree item
+   */
   constructor(
     public readonly commit: Commit,
     public readonly filePath: string,
@@ -30,7 +39,14 @@ export class CommitTreeItem extends vscode.TreeItem {
   iconPath = new vscode.ThemeIcon('git-commit');
 }
 
+/**
+ * Tree item representing a file in the file history view.
+ */
 export class FileHistoryTreeItem extends vscode.TreeItem {
+  /**
+   * Creates a new FileHistoryTreeItem.
+   * @param filePath - The file path
+   */
   constructor(public readonly filePath: string) {
     super(vscode.workspace.asRelativePath(filePath), vscode.TreeItemCollapsibleState.Collapsed);
     this.contextValue = 'file';
@@ -38,6 +54,10 @@ export class FileHistoryTreeItem extends vscode.TreeItem {
   }
 }
 
+/**
+ * Tree data provider for the Git file history view.
+ * Manages the display of file history and caches commit data.
+ */
 export class FileHistoryProvider implements vscode.TreeDataProvider<vscode.TreeItem> {
   private _onDidChangeTreeData: vscode.EventEmitter<vscode.TreeItem | undefined | null | void> = new vscode.EventEmitter<vscode.TreeItem | undefined | null | void>();
   readonly onDidChangeTreeData: vscode.Event<vscode.TreeItem | undefined | null | void> = this._onDidChangeTreeData.event;
@@ -46,20 +66,38 @@ export class FileHistoryProvider implements vscode.TreeDataProvider<vscode.TreeI
   private currentFilePath: string | undefined;
   private gitService: GitService;
 
+  /**
+   * Creates a new FileHistoryProvider instance.
+   * @param gitService - The GitService instance to use for Git operations
+   */
   constructor(gitService: GitService) {
     this.gitService = gitService;
   }
 
+  /**
+   * Refreshes the tree view, optionally for a specific file.
+   * @param filePath - Optional file path to refresh (clears cache for that file)
+   */
   refresh(filePath?: string): void {
     this.currentFilePath = filePath;
     this.commits.delete(filePath || '');
     this._onDidChangeTreeData.fire();
   }
 
+  /**
+   * Gets the tree item representation of an element.
+   * @param element - The tree item element
+   * @returns The tree item
+   */
   getTreeItem(element: vscode.TreeItem): vscode.TreeItem {
     return element;
   }
 
+  /**
+   * Gets the children of a tree item.
+   * @param element - The parent tree item (undefined for root)
+   * @returns Array of child tree items
+   */
   async getChildren(element?: vscode.TreeItem): Promise<vscode.TreeItem[]> {
     if (!element) {
       // Root level - show current file or empty state
@@ -97,6 +135,11 @@ export class FileHistoryProvider implements vscode.TreeDataProvider<vscode.TreeI
     return [];
   }
 
+  /**
+   * Gets the parent of a tree item.
+   * @param element - The child tree item
+   * @returns The parent tree item, or undefined if no parent
+   */
   async getParent(element: vscode.TreeItem): Promise<vscode.TreeItem | undefined> {
     if (element instanceof CommitTreeItem) {
       return new FileHistoryTreeItem(element.filePath);
@@ -104,6 +147,10 @@ export class FileHistoryProvider implements vscode.TreeDataProvider<vscode.TreeI
     return undefined;
   }
 
+  /**
+   * Sets the current file and refreshes the view.
+   * @param filePath - The file path to display history for
+   */
   setCurrentFile(filePath: string): void {
     this.currentFilePath = filePath;
     // Clear cache to force reload
@@ -111,6 +158,9 @@ export class FileHistoryProvider implements vscode.TreeDataProvider<vscode.TreeI
     this.refresh(filePath);
   }
 
+  /**
+   * Clears the current file and refreshes the view.
+   */
   clearCurrentFile(): void {
     this.currentFilePath = undefined;
     this.refresh();

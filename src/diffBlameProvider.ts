@@ -5,12 +5,20 @@ import { formatDate, getShortHash } from './utils';
 import * as path from 'path';
 import * as os from 'os';
 
+/**
+ * Provides hover information for temporary diff files created by DiffViewer.
+ * Shows author and commit information when hovering over lines in diff views.
+ */
 export class DiffBlameProvider {
   private gitService: GitService;
   private disposables: vscode.Disposable[] = [];
   private blameCache: Map<string, BlameLine[]> = new Map();
   private tempDir: string;
 
+  /**
+   * Creates a new DiffBlameProvider instance.
+   * @param gitService - The GitService instance to use for Git operations
+   */
   constructor(gitService: GitService) {
     this.gitService = gitService;
     this.tempDir = path.join(os.tmpdir(), 'fz-git-file-histrory');
@@ -55,10 +63,22 @@ export class DiffBlameProvider {
     this.disposables.push(hoverProvider);
   }
 
+  /**
+   * Checks if a file path belongs to a temporary diff file.
+   * @param filePath - The file path to check
+   * @returns true if the file is a temporary diff file
+   * @private
+   */
   private isDiffTempFile(filePath: string): boolean {
     return filePath.startsWith(this.tempDir) && (filePath.includes('.left') || filePath.includes('.right'));
   }
 
+  /**
+   * Loads and caches blame information for a temporary diff file.
+   * @param fileUri - The URI of the temporary file
+   * @param commitHash - The commit hash to get blame information for
+   * @param originalFilePath - The original file path in the repository
+   */
   async setBlameForFile(fileUri: vscode.Uri, commitHash: string, originalFilePath: string): Promise<void> {
     try {
       const blameLines = await this.gitService.getBlameAtCommit(originalFilePath, commitHash);
@@ -68,6 +88,10 @@ export class DiffBlameProvider {
     }
   }
 
+  /**
+   * Clears cached blame information for a specific file or all files.
+   * @param filePath - Optional file path to clear cache for (clears all if not provided)
+   */
   clearCache(filePath?: string): void {
     if (filePath) {
       this.blameCache.delete(filePath);
@@ -76,6 +100,9 @@ export class DiffBlameProvider {
     }
   }
 
+  /**
+   * Disposes of all resources and clears caches.
+   */
   dispose(): void {
     this.disposables.forEach(d => d.dispose());
     this.blameCache.clear();

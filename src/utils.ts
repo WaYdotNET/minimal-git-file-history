@@ -1,6 +1,12 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 
+/**
+ * Formats a date according to the specified format type.
+ * @param date - The date to format
+ * @param format - Format type: 'relative' (e.g., "2 hours ago"), 'absolute' (e.g., "2024-01-15 14:30:00"), or 'both'
+ * @returns Formatted date string
+ */
 export function formatDate(date: Date, format: 'relative' | 'absolute' | 'both' = 'relative'): string {
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
@@ -35,6 +41,10 @@ export function formatDate(date: Date, format: 'relative' | 'absolute' | 'both' 
   }
 }
 
+/**
+ * Gets the workspace root directory path.
+ * @returns The workspace root path, or undefined if no workspace is open
+ */
 export function getWorkspaceRoot(): string | undefined {
   const workspaceFolders = vscode.workspace.workspaceFolders;
   if (!workspaceFolders || workspaceFolders.length === 0) {
@@ -43,6 +53,12 @@ export function getWorkspaceRoot(): string | undefined {
   return workspaceFolders[0].uri.fsPath;
 }
 
+/**
+ * Converts an absolute file path to a relative path within the workspace.
+ * @param filePath - The absolute or relative file path
+ * @param workspaceRoot - The workspace root directory path
+ * @returns Relative path from workspace root, or basename if file is outside workspace
+ */
 export function getRelativePath(filePath: string, workspaceRoot: string): string {
   // Normalize paths for comparison
   const normalizedFilePath = path.normalize(filePath);
@@ -64,6 +80,12 @@ export function getRelativePath(filePath: string, workspaceRoot: string): string
   return relativePath.replace(/\\/g, '/'); // Normalize to forward slashes
 }
 
+/**
+ * Truncates a commit message to a maximum length, appending '...' if truncated.
+ * @param message - The commit message to truncate
+ * @param maxLength - Maximum length (default: 72 characters)
+ * @returns Truncated message with '...' suffix if needed
+ */
 export function truncateMessage(message: string, maxLength: number = 72): string {
   if (message.length <= maxLength) {
     return message;
@@ -71,6 +93,11 @@ export function truncateMessage(message: string, maxLength: number = 72): string
   return message.substring(0, maxLength - 3) + '...';
 }
 
+/**
+ * Gets the short version of a Git commit hash (first 7 characters).
+ * @param hash - Full commit hash (40 characters)
+ * @returns Short hash (7 characters)
+ */
 export function getShortHash(hash: string): string {
   return hash.substring(0, 7);
 }

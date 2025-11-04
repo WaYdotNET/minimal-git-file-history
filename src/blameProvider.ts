@@ -3,6 +3,10 @@ import { GitService } from './gitService';
 import { BlameLine } from './types';
 import { formatDate, getShortHash } from './utils';
 
+/**
+ * Provides Git blame annotations (CodeLens) for regular files in the editor.
+ * Shows who last modified each line and allows clicking to jump to that commit.
+ */
 export class BlameProvider {
   private gitService: GitService;
   private codeLensProvider: vscode.CodeLensProvider;
@@ -11,6 +15,10 @@ export class BlameProvider {
   private enabled: boolean = false;
   private currentDocument: vscode.TextDocument | undefined;
 
+  /**
+   * Creates a new BlameProvider instance.
+   * @param gitService - The GitService instance to use for Git operations
+   */
   constructor(gitService: GitService) {
     this.gitService = gitService;
 
@@ -55,6 +63,10 @@ export class BlameProvider {
     this.disposables.push(registration);
   }
 
+  /**
+   * Toggles blame annotations on or off for a specific file.
+   * @param filePath - Optional file path to toggle blame for
+   */
   async toggle(filePath?: string): Promise<void> {
     this.enabled = !this.enabled;
 
@@ -76,6 +88,10 @@ export class BlameProvider {
     }
   }
 
+  /**
+   * Refreshes blame annotations for a specific document.
+   * @param document - Optional document to refresh (defaults to current document)
+   */
   async refresh(document?: vscode.TextDocument): Promise<void> {
     const doc = document || this.currentDocument;
     if (!doc) {
@@ -89,6 +105,12 @@ export class BlameProvider {
     vscode.commands.executeCommand('vscode.executeCodeLensProvider', doc.uri);
   }
 
+  /**
+   * Gets blame information for a file (cached).
+   * @param filePath - The file path to get blame for
+   * @returns Array of BlameLine objects
+   * @private
+   */
   private async getBlame(filePath: string): Promise<BlameLine[]> {
     // Check cache first
     if (this.blameCache.has(filePath)) {
@@ -104,6 +126,9 @@ export class BlameProvider {
     }
   }
 
+  /**
+   * Disposes of all resources and clears caches.
+   */
   dispose(): void {
     this.disposables.forEach(d => d.dispose());
     this.blameCache.clear();

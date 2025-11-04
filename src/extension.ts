@@ -13,6 +13,11 @@ let diffViewer: DiffViewer;
 let blameProvider: BlameProvider;
 let diffBlameProvider: DiffBlameProvider;
 
+/**
+ * This method is called when the extension is activated.
+ * It initializes all services, registers commands, and sets up event listeners.
+ * @param context - The extension context provided by VS Code
+ */
 export function activate(context: vscode.ExtensionContext) {
   // Initialize services
   gitService = new GitService();
@@ -324,6 +329,12 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   // Helper function to load file history automatically
+  /**
+   * Automatically loads file history when a file is selected or opened.
+   * Respects the autoLoadOnFileSelect configuration setting.
+   * @param filePath - The file path to load history for
+   * @param uri - Optional URI of the file
+   */
   async function loadFileHistoryAuto(filePath: string, uri?: vscode.Uri): Promise<void> {
     try {
       const config = vscode.workspace.getConfiguration('minimalGitFileHistory');
@@ -427,11 +438,20 @@ export function activate(context: vscode.ExtensionContext) {
     }
 }
 
+/**
+ * This method is called when the extension is deactivated.
+ * It cleans up resources and disposes of providers.
+ */
 export function deactivate() {
   blameProvider?.dispose();
   diffBlameProvider?.dispose();
 }
 
+/**
+ * Helper function to get the file path from a URI or the active editor.
+ * @param uri - Optional URI of the file
+ * @returns The file path, or undefined if no file is available
+ */
 async function getFilePath(uri?: vscode.Uri): Promise<string | undefined> {
   if (uri) {
     return uri.fsPath;

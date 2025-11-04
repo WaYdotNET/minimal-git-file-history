@@ -7,13 +7,29 @@ import { getWorkspaceRoot, getRelativePath } from './utils';
 
 const execAsync = promisify(exec);
 
+/**
+ * Service class for executing Git commands and retrieving Git repository information.
+ * Provides methods to get file history, blame information, diffs, and other Git operations.
+ */
 export class GitService {
   private workspaceRoot: string | undefined;
 
+  /**
+   * Creates a new GitService instance.
+   * Initializes the workspace root from the currently open workspace.
+   */
   constructor() {
     this.workspaceRoot = getWorkspaceRoot();
   }
 
+  /**
+   * Executes a Git command and returns the output.
+   * @param command - The Git command to execute (without the 'git' prefix)
+   * @param cwd - Optional working directory (defaults to workspace root)
+   * @returns The stdout output of the command
+   * @throws Error if Git is not installed, not in PATH, or command fails
+   * @private
+   */
   private async executeGitCommand(command: string, cwd?: string): Promise<string> {
     const workDir = cwd || this.workspaceRoot;
     if (!workDir) {
@@ -39,6 +55,12 @@ export class GitService {
     }
   }
 
+  /**
+   * Gets the commit history for a specific file.
+   * @param filePath - Absolute or relative path to the file
+   * @param maxCommits - Maximum number of commits to retrieve (default: 100)
+   * @returns Array of commits, ordered from newest to oldest
+   */
   async getFileHistory(filePath: string, maxCommits: number = 100): Promise<Commit[]> {
     const relativePath = this.workspaceRoot
       ? getRelativePath(filePath, this.workspaceRoot)
@@ -85,6 +107,12 @@ export class GitService {
     return commits;
   }
 
+  /**
+   * Gets the content of a file at a specific commit.
+   * @param filePath - Absolute or relative path to the file
+   * @param commitHash - The commit hash to retrieve the file from
+   * @returns The file content as a string, or empty string if file doesn't exist at that commit
+   */
   async getFileContentAtCommit(filePath: string, commitHash: string): Promise<string> {
     const relativePath = this.workspaceRoot
       ? getRelativePath(filePath, this.workspaceRoot)
@@ -101,6 +129,12 @@ export class GitService {
     }
   }
 
+  /**
+   * Gets Git blame information for a file at a specific commit.
+   * @param filePath - Absolute or relative path to the file
+   * @param commitHash - The commit hash to get blame information for
+   * @returns Array of BlameLine objects containing line-by-line authorship information
+   */
   async getBlameAtCommit(filePath: string, commitHash: string): Promise<BlameLine[]> {
     const relativePath = this.workspaceRoot
       ? getRelativePath(filePath, this.workspaceRoot)
@@ -184,6 +218,11 @@ export class GitService {
     }
   }
 
+  /**
+   * Gets Git blame information for a file in the working directory.
+   * @param filePath - Absolute or relative path to the file
+   * @returns Array of BlameLine objects containing line-by-line authorship information
+   */
   async getBlame(filePath: string): Promise<BlameLine[]> {
     const relativePath = this.workspaceRoot
       ? getRelativePath(filePath, this.workspaceRoot)
@@ -267,6 +306,14 @@ export class GitService {
     }
   }
 
+  /**
+   * Gets the diff between two versions of a file.
+   * @param filePath - Absolute or relative path to the file
+   * @param commit1 - First commit hash (optional, defaults to HEAD)
+   * @param commit2 - Second commit hash (optional)
+   * @param compareWithWorking - Whether to compare with working directory instead of commits
+   * @returns GitDiff object containing the diff information and file contents
+   */
   async getDiff(
     filePath: string,
     commit1?: string,
@@ -353,6 +400,12 @@ export class GitService {
     };
   }
 
+  /**
+   * Parses unified diff output into structured hunk objects.
+   * @param diffOutput - The raw diff output from Git
+   * @returns Array of DiffHunk objects
+   * @private
+   */
   private parseDiffHunks(diffOutput: string): GitDiff['hunks'] {
     const hunks: GitDiff['hunks'] = [];
     const lines = diffOutput.split('\n');
@@ -411,6 +464,12 @@ export class GitService {
     return hunks;
   }
 
+  /**
+   * Parses diff output to count additions and deletions.
+   * @param diffOutput - The raw diff output from Git
+   * @returns Object with additions and deletions counts
+   * @private
+   */
   private parseDiffStats(diffOutput: string): { additions: number; deletions: number } {
     let additions = 0;
     let deletions = 0;
@@ -426,6 +485,11 @@ export class GitService {
     return { additions, deletions };
   }
 
+  /**
+   * Gets the list of files changed in a specific commit.
+   * @param commitHash - The commit hash to inspect
+   * @returns Array of FileChange objects describing the changes
+   */
   async getCommitFiles(commitHash: string): Promise<FileChange[]> {
     const command = `show --name-status --format="" ${commitHash}`;
     const output = await this.executeGitCommand(command);
@@ -458,6 +522,10 @@ export class GitService {
     return changes;
   }
 
+  /**
+   * Checks if the current workspace is a Git repository.
+   * @returns true if the workspace is a Git repository, false otherwise
+   */
   async isGitRepository(): Promise<boolean> {
     try {
       await this.executeGitCommand('rev-parse --git-dir');
@@ -467,6 +535,10 @@ export class GitService {
     }
   }
 
+  /**
+   * Gets the name of the current Git branch.
+   * @returns The branch name, or empty string if not in a Git repository or on detached HEAD
+   */
   async getCurrentBranch(): Promise<string> {
     try {
       return await this.executeGitCommand('rev-parse --abbrev-ref HEAD');
