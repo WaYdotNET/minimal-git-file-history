@@ -1,5 +1,5 @@
 {
-  "name": "minimal-git-file -history",
+  "name": "minimal-git-file-history",
   "displayName": "Minimal Git file history",
   "description": "Navigate Git file history with diffs, blame annotations, and commit navigation - similar to JetBrains",
   "version": "0.1.1",
