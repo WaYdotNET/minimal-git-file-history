@@ -1,0 +1,175 @@
+{
+  "name": "minimal-git-file -history",
+  "displayName": "Minimal Git file history",
+  "description": "Navigate Git file history with diffs, blame annotations, and commit navigation - similar to JetBrains",
+  "version": "0.1.1",
+  "publisher": "waydotnet",
+  "author": "WaYdotNET (Carlo Bertini)",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/waydotnet/minimal-git-file-history"
+  },
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "icon": "media/logo.png",
+  "categories": [
+    "Other",
+    "Source Control"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "gitFileHistory.showHistory",
+        "title": "Show Minimal Git file history",
+        "icon": "$(history)"
+      },
+      {
+        "command": "gitFileHistory.showBlame",
+        "title": "Toggle Git Blame",
+        "icon": "$(person)"
+      },
+      {
+        "command": "gitFileHistory.compareWithPrevious",
+        "title": "Compare with Previous Commit"
+      },
+      {
+        "command": "gitFileHistory.compareWithWorking",
+        "title": "Compare with Working Directory"
+      },
+      {
+        "command": "gitFileHistory.compareVersions",
+        "title": "Compare Two Commits"
+      },
+      {
+        "command": "gitFileHistory.viewCommit",
+        "title": "View File at Commit"
+      },
+      {
+        "command": "gitFileHistory.navigateToParent",
+        "title": "Navigate to Parent Commit"
+      },
+      {
+        "command": "gitFileHistory.navigateToChild",
+        "title": "Navigate to Child Commit"
+      },
+      {
+        "command": "gitFileHistory.openDiffPanel",
+        "title": "Open Detailed Diff Panel"
+      },
+      {
+        "command": "gitFileHistory.refresh",
+        "title": "Refresh History",
+        "icon": "$(refresh)"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "gitFileHistory.showHistory",
+          "when": "resourceLangId != 'git'",
+          "group": "git-history"
+        },
+        {
+          "command": "gitFileHistory.compareWithWorking",
+          "when": "resourceLangId != 'git'",
+          "group": "git-history"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "gitFileHistory.showHistory",
+          "group": "git-history"
+        },
+        {
+          "command": "gitFileHistory.showBlame",
+          "group": "git-history"
+        },
+        {
+          "command": "gitFileHistory.compareWithPrevious",
+          "group": "git-history"
+        },
+        {
+          "command": "gitFileHistory.compareWithWorking",
+          "group": "git-history"
+        }
+      ],
+      "scm/resourceState/context": [
+        {
+          "command": "gitFileHistory.showHistory",
+          "group": "git-history"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "gitFileHistory.refresh",
+          "when": "view == gitFileHistory.view",
+          "group": "navigation"
+        }
+      ],
+      "view/item/context": [
+        {
+          "command": "gitFileHistory.viewCommit",
+          "when": "view == gitFileHistory.view && viewItem == 'commit'",
+          "group": "inline"
+        }
+      ]
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "gitFileHistory.view",
+          "name": "Minimal Git file history",
+          "icon": "media/logo.png",
+          "when": "workspaceFolderCount > 0"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Minimal Git file history",
+      "properties": {
+        "minimalGitHistory.maxCommits": {
+          "type": "number",
+          "default": 100,
+          "description": "Maximum number of commits to fetch"
+        },
+        "minimalGitHistory.blameEnabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable Git Blame annotations"
+        },
+        "minimalGitHistory.dateFormat": {
+          "type": "string",
+          "default": "relative",
+          "enum": [
+            "relative",
+            "absolute",
+            "both"
+          ],
+          "description": "Date format for commit display"
+        },
+        "minimalGitHistory.autoLoadOnFileSelect": {
+          "type": "boolean",
+          "default": false,
+          "description": "Automatically load Git history in the Minimal Git file history panel when a file is selected or opened in the editor"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.80.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {}
+}
